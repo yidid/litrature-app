@@ -1,22 +1,15 @@
 const express= require("express");
 const {MongoClient} =require('mongodb');
-
 const PORT= process.env.PORT || 8000
-
 const app=express();
+
 
 app.use(express.json({extended:false}))
 
 app.get('/', (req,res)=>{
     res.send("hello world");
 });
-app.post('/' ,(req,res)=>{
-    res.send(`Hola ${req.body.name}`)
-});
-app.get('/hello/:name',(req,res)=>{
-    res.send(`holaa amigo ${req.params.name}`)
 
-})
 app.get('/api/articles/:name',async(req,res)=>{
     try {
         const articleName =req.params.name;
@@ -54,15 +47,9 @@ app.post('/api/articles/:name/add-comments', async (req,res)=>{
         })
         const updateArticleInfo= await db.collection('articles').findOne({name:articleName})
         res.status(200).json(updateArticleInfo)
-        client.close();
-        
+        client.close();   
     } catch (error) {
-        res.status(500).json({message:"Error conneting to database" ,error})
-        
+        res.status(500).json({message:"Error conneting to database" ,error}) 
     }
-    
-
 });
-
-
 app.listen(PORT, ()=>console.log(`server started at port ${PORT}`))
